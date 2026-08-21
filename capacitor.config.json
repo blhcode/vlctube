@@ -1,0 +1,11 @@
+{
+  "appId": "local.vlctube",
+  "appName": "VLCTube",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

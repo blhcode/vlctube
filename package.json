@@ -1,0 +1,67 @@
+{
+  "name": "vlctube",
+  "productName": "VLCTube",
+  "version": "1.0.1",
+  "description": "YouTube-like UI that plays videos through VLC/yt-dlp, without the YouTube ad player",
+  "author": "Isaiah",
+  "homepage": "https://github.com/blhcode/vlctube",
+  "license": "MIT",
+  "main": "electron/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "electron . --no-sandbox",
+    "postinstall": "node scripts/fetch-ytdlp.js",
+    "dist": "electron-builder --linux deb && node scripts/fix-deb.js",
+    "sync:android": "npx cap sync android",
+    "android": "npx cap sync android && cd android && ./gradlew assembleDebug"
+  },
+  "devDependencies": {
+    "electron": "^37.10.3",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "local.vlctube",
+    "productName": "VLCTube",
+    "files": [
+      "electron/**/*",
+      "renderer/**/*",
+      "build/icon.png",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "bin/yt-dlp",
+        "to": "yt-dlp"
+      }
+    ],
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "executableName": "vlctube",
+      "category": "AudioVideo",
+      "icon": "build/icons",
+      "synopsis": "Watch YouTube without ads",
+      "description": "A YouTube-like desktop client. Playback uses yt-dlp (the same extractor VLC uses) so the YouTube ad player is never loaded.",
+      "desktop": {
+        "entry": {
+          "Name": "VLCTube",
+          "Comment": "Watch YouTube without ads",
+          "Categories": "AudioVideo;Video;Player;TV;",
+          "StartupWMClass": "vlctube"
+        }
+      }
+    },
+    "deb": {
+      "packageName": "vlctube",
+      "maintainer": "Isaiah <isaiah@users.noreply.github.com>"
+    }
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/status-bar": "^8.0.3"
+  }
+}

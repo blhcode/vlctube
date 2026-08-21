@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VLCTube</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="masthead-left">
+        <button class="icon-btn" id="toggle-sidebar" aria-label="Guide">
+          <svg viewBox="0 0 24 24"><path d="M21 6H3V5h18v1zm0 5H3v1h18v-1zm0 6H3v1h18v-1z" /></svg>
+        </button>
+        <a class="logo" href="#/" id="logo">
+          <img class="logo-mark" src="logo.png" width="36" height="36" alt="" />
+          <span class="logo-text">VLC<span>Tube</span></span>
+        </a>
+      </div>
+      <form class="search-wrap" id="search-form" autocomplete="off">
+        <div class="search-box">
+          <input id="search-input" type="search" placeholder="Search" />
+          <button class="search-submit" type="submit" aria-label="Search">
+            <svg viewBox="0 0 24 24"><path d="M16.296 16.996a8 8 0 11.707-.708L21 19.285l-.714.714-3.99-3.003zM10 17a7 7 0 100-14 7 7 0 000 14z" /></svg>
+          </button>
+        </div>
+        <button class="icon-btn mic" type="button" title="Search with your voice" disabled>
+          <svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3zm7 9a1 1 0 10-2 0 5 5 0 01-10 0 1 1 0 10-2 0 7 7 0 006 6.93V21H8v2h8v-2h-3v-2.07A7 7 0 0019 12z" /></svg>
+        </button>
+        <div class="suggest" id="suggest" hidden></div>
+      </form>
+      <div class="masthead-right">
+        <button class="icon-btn" title="Notifications" disabled>
+          <svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34V3.5a2 2 0 114 0v.84C16.44 5.1 18 7.4 18 10.32v5.15l2 1.88z" /></svg>
+        </button>
+        <div class="avatar-btn" title="You">V</div>
+      </div>
+    </header>
+
+    <div class="shell">
+      <aside class="guide" id="guide">
+        <nav>
+          <a class="g-item active" data-route="/" href="#/">
+            <svg viewBox="0 0 24 24"><path d="M4 10v11h6v-6h4v6h6V10L12 3z" /></svg>
+            <span>Home</span>
+          </a>
+          <a class="g-item" data-route="/shorts" href="#/shorts">
+            <svg viewBox="0 0 24 24"><path d="M10 14.65v-5.3L15 12l-5 2.65zm7.77-4.33c-.77-.32-1.2-.5-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.07 2.04-2 3.49.07 1.42.93 2.67 2.22 3.25.03.01 1.2.5 1.2.5L6 14.93c-1.83.97-2.53 3.24-1.56 5.07.97 1.83 3.24 2.53 5.07 1.56l8.5-4.5c1.29-.68 2.06-2.04 1.99-3.49-.07-1.42-.94-2.68-2.23-3.25z" /></svg>
+            <span>Shorts</span>
+          </a>
+          <a class="g-item" data-route="/feed/subscriptions" href="#/feed/subscriptions">
+            <svg viewBox="0 0 24 24"><path d="M10 18v-6l5 3-5 3zm7-15H7v1h10V3zm3 3H4v1h16V6zm2 3H2v12h20V9zM3 10h18v10H3V10z" /></svg>
+            <span>Subscriptions</span>
+          </a>
+          <hr />
+          <a class="g-item" data-route="/you" href="#/you">
+            <svg viewBox="0 0 24 24"><path d="M3 3v18h18V3H3zm16.5 16.5h-15v-15h15v15zM9 15l6-3-6-3v6z" /></svg>
+            <span>You</span>
+          </a>
+          <a class="g-item" data-route="/feed/history" href="#/feed/history">
+            <svg viewBox="0 0 24 24"><path d="M14.97 16.95 10 13.87V7h2v5.76l4.03 2.49-1.06 1.7zM12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36l1.85-1.11A11 11 0 0112 23 11 11 0 1112 1c2.74 0 5.26 1 7.23 2.66L18.4 5.4A9 9 0 0012 3z" /></svg>
+            <span>History</span>
+          </a>
+          <a class="g-item" data-route="/playlist/watch-later" href="#/playlist/watch-later">
+            <svg viewBox="0 0 24 24"><path d="M14.97 16.95 10 13.87V7h2v5.76l4.03 2.49-1.06 1.7zM12 3a9 9 0 100 18 9 9 0 000-18z" /></svg>
+            <span>Watch later</span>
+          </a>
+          <a class="g-item" data-route="/playlist/liked" href="#/playlist/liked">
+            <svg viewBox="0 0 24 24"><path d="M3 11h3v10H3zm4 10h12.4a2 2 0 001.95-1.54L22 11h-7V6.5A2.5 2.5 0 0012.5 4 1.5 1.5 0 0011 5.5V9L7 13.1V21z" /></svg>
+            <span>Liked videos</span>
+          </a>
+        </nav>
+        <p class="guide-note">Playback uses VLC’s YouTube extractor (yt-dlp). The YouTube ad player is never loaded.</p>
+      </aside>
+
+      <main id="main"></main>
+    </div>
+
+    <script src="bridge.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
