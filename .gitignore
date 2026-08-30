@@ -14,3 +14,9 @@ android/app/release/
 .env
 .env.*
 *.deb
+
+# VR mode — local testing only until ready
+www/vr.js
+www/vr.css
+renderer/vr.js
+renderer/vr.css
