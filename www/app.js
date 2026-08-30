@@ -26,6 +26,11 @@ function save(key, value) {
 function pushHistory(video) {
   store.history = [video, ...store.history.filter((v) => v.id !== video.id)].slice(0, 80);
   save("history", store.history);
+  try {
+    localStorage.removeItem("vlctube:home-cache");
+  } catch {
+    /* ignore */
+  }
 }
 
 function toggleId(listKey, video) {
@@ -187,18 +192,25 @@ function bindCards(root) {
   });
 }
 
-function paintHome(videos, shorts) {
+function paintHome(videos, shorts, meta = {}) {
   const rail = (shorts || []).slice(0, 12);
   const rest = (videos || []).filter((v) => !v.isShort);
+  const reasons = meta.reasons || [];
+  const personalized = Boolean(meta.personalized);
+  const chips = personalized
+    ? ["For you", ...reasons.slice(0, 5), "Music", "Gaming", "News"]
+    : ["All", "Music", "Gaming", "News", "Live", "Mixes"];
   main.innerHTML = `
     <div class="chips">
-      <button class="chip active">All</button>
-      <button class="chip">Music</button>
-      <button class="chip">Gaming</button>
-      <button class="chip">News</button>
-      <button class="chip">Live</button>
-      <button class="chip">Mixes</button>
+      ${chips
+        .map((label, i) => `<button class="chip ${i === 0 ? "active" : ""}" data-chip="${esc(label)}">${esc(label)}</button>`)
+        .join("")}
     </div>
+    ${
+      personalized
+        ? `<p class="muted" style="margin:0 0 14px;font-size:13px">Recommended from channels and topics you’ve been watching</p>`
+        : ""
+    }
     ${
       rail.length
         ? `<section class="shorts-rail">
@@ -223,27 +235,35 @@ function paintHome(videos, shorts) {
   bindCards(main);
   main.querySelectorAll(".chip").forEach((chip) => {
     chip.addEventListener("click", () => {
-      if (chip.textContent === "All") return;
-      location.hash = "#/results?q=" + encodeURIComponent(chip.textContent);
+      const label = chip.dataset.chip || chip.textContent;
+      if (label === "All" || label === "For you") return;
+      location.hash = "#/results?q=" + encodeURIComponent(label);
     });
   });
 }
 
 async function renderHome(token) {
+  const taste = window.vlctubeTaste.buildTaste(store.history);
+  const fp = window.vlctubeTaste.tasteFingerprint(taste);
   const cachedHome = load("home-cache", null);
   const cachedShorts = load("shorts-cache", null);
-  if (cachedHome?.videos?.length) paintHome(cachedHome.videos, cachedShorts?.videos);
-  else main.innerHTML = `<div class="loading">Loading…</div>`;
+  const cacheFresh = cachedHome?.videos?.length && cachedHome.fp === fp;
 
-  const homeP = window.vlctube.home();
+  if (cacheFresh) paintHome(cachedHome.videos, cachedShorts?.videos, cachedHome.meta || {});
+  else main.innerHTML = `<div class="loading">${taste.personalized ? "Finding videos for you…" : "Loading…"}</div>`;
+
+  const homeP = window.vlctube.home(taste);
   const shortsP = window.vlctube.shorts();
-  const { videos } = await homeP;
+  const home = await homeP;
   if (!still(token)) return;
-  paintHome(videos, cachedShorts?.videos);
-  save("home-cache", { videos });
+  const watched = new Set(taste.watchedIds || []);
+  const videos = (home.videos || []).filter((v) => !watched.has(v.id));
+  const meta = { personalized: home.personalized, reasons: home.reasons || [] };
+  paintHome(videos, cachedShorts?.videos, meta);
+  save("home-cache", { videos, meta, fp });
   const { videos: shorts } = await shortsP;
   if (!still(token)) return;
-  paintHome(videos, shorts);
+  paintHome(videos, shorts, meta);
   save("shorts-cache", { videos: shorts });
 }
 

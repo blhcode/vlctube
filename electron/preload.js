@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("vlctube", {
-  home: () => ipcRenderer.invoke("home"),
+  home: (taste) => ipcRenderer.invoke("home", taste || {}),
   search: (q, opts) => ipcRenderer.invoke("search", q, opts || {}),
   suggest: (q) => ipcRenderer.invoke("suggest", q),
   shorts: (id) => ipcRenderer.invoke("shorts", id),

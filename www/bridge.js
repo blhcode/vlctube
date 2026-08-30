@@ -137,9 +137,76 @@
   }
 
   window.vlctube = {
-    async home() {
-      const videos = await searchRaw("official video", 16);
-      return { videos, source: "yt-dlp" };
+    async home(taste = {}) {
+      const channels = Array.isArray(taste.channels) ? taste.channels.slice(0, 4) : [];
+      const topics = Array.isArray(taste.topics) ? taste.topics.slice(0, 5) : [];
+      const watched = new Set(Array.isArray(taste.watchedIds) ? taste.watchedIds : []);
+      const personalized = Boolean(taste.personalized && (channels.length || topics.length));
+
+      if (!personalized) {
+        const videos = await searchRaw("official video", 16);
+        return { videos, source: "yt-dlp", personalized: false, reasons: [] };
+      }
+
+      const jobs = [];
+      const reasons = [];
+
+      for (const ch of channels.slice(0, 3)) {
+        reasons.push(ch.name);
+        if (ch.id) {
+          jobs.push(
+            window.vlctube
+              .channel(ch.id)
+              .then((r) => (r.videos || []).slice(0, 10))
+              .catch(() => searchRaw(ch.name, 10).catch(() => [])),
+          );
+        } else {
+          jobs.push(searchRaw(ch.name, 10).catch(() => []));
+        }
+      }
+
+      for (const topic of topics.slice(0, 4)) {
+        reasons.push(topic);
+        jobs.push(searchRaw(topic, 8).catch(() => []));
+      }
+
+      jobs.push(searchRaw("trending", 6).catch(() => searchRaw("official video", 6).catch(() => [])));
+
+      const pools = await Promise.all(jobs);
+      const seen = new Set(watched);
+      const merged = [];
+
+      let added = true;
+      while (added && merged.length < 30) {
+        added = false;
+        for (const pool of pools) {
+          while (pool.length) {
+            const v = pool.shift();
+            if (!v?.id || seen.has(v.id)) continue;
+            seen.add(v.id);
+            merged.push(v);
+            added = true;
+            break;
+          }
+        }
+      }
+
+      if (merged.length < 8) {
+        const filler = await searchRaw("official video", 16);
+        for (const v of filler) {
+          if (!v?.id || seen.has(v.id)) continue;
+          seen.add(v.id);
+          merged.push(v);
+          if (merged.length >= 24) break;
+        }
+      }
+
+      return {
+        videos: merged.slice(0, 28),
+        source: "personalized",
+        personalized: true,
+        reasons: [...new Set(reasons)].slice(0, 8),
+      };
     },
     async search(q, opts = {}) {
       const type = opts.type || "all";

@@ -42,7 +42,7 @@ app.whenReady().then(async () => {
   const proxy = await startMediaProxy();
   proxyPort = proxy.port;
 
-  ipcMain.handle("home", () => youtube.homeFeed());
+  ipcMain.handle("home", (_e, taste) => youtube.homeFeed(taste || {}));
   ipcMain.handle("search", (_e, q, opts) => youtube.searchVideos(q, opts || {}));
   ipcMain.handle("suggest", (_e, q) => youtube.suggestions(q));
   ipcMain.handle("shorts", (_e, id) => youtube.shortsFeed(id));
