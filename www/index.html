@@ -11,6 +11,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="vr.css" />
   </head>
   <body>
     <header class="masthead">
@@ -36,6 +37,9 @@
         <div class="suggest" id="suggest" hidden></div>
       </form>
       <div class="masthead-right">
+        <button class="icon-btn vr-btn" id="vr-toggle" title="VR mode" aria-label="VR mode">
+          <svg viewBox="0 0 24 24"><path d="M20.89 7.55A2.5 2.5 0 0018.5 6h-13A2.5 2.5 0 003.11 7.55L2 12v4.5A2.5 2.5 0 004.5 19H8l2-3h4l2 3h3.5a2.5 2.5 0 002.5-2.5V12l-1.11-4.45zM8.5 14a2 2 0 110-4 2 2 0 010 4zm7 0a2 2 0 110-4 2 2 0 010 4z"/></svg>
+        </button>
         <button class="icon-btn" title="Notifications" disabled>
           <svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34V3.5a2 2 0 114 0v.84C16.44 5.1 18 7.4 18 10.32v5.15l2 1.88z" /></svg>
         </button>
@@ -75,6 +79,11 @@
             <svg viewBox="0 0 24 24"><path d="M3 11h3v10H3zm4 10h12.4a2 2 0 001.95-1.54L22 11h-7V6.5A2.5 2.5 0 0012.5 4 1.5 1.5 0 0011 5.5V9L7 13.1V21z" /></svg>
             <span>Liked videos</span>
           </a>
+          <hr />
+          <a class="g-item" data-route="/vr" href="#/vr" data-vr-enter>
+            <svg viewBox="0 0 24 24"><path d="M20.89 7.55A2.5 2.5 0 0018.5 6h-13A2.5 2.5 0 003.11 7.55L2 12v4.5A2.5 2.5 0 004.5 19H8l2-3h4l2 3h3.5a2.5 2.5 0 002.5-2.5V12l-1.11-4.45zM8.5 14a2 2 0 110-4 2 2 0 010 4zm7 0a2 2 0 110-4 2 2 0 010 4z"/></svg>
+            <span>VR mode</span>
+          </a>
         </nav>
         <p class="guide-note">Playback uses VLC’s YouTube extractor (yt-dlp). The YouTube ad player is never loaded.</p>
       </aside>
@@ -84,6 +93,7 @@
 
     <script src="taste.js"></script>
     <script src="bridge.js"></script>
+    <script src="vr.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

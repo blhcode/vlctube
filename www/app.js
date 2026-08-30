@@ -124,6 +124,10 @@ async function render() {
   setActiveGuide(loc.path.startsWith("/shorts") ? "/shorts" : loc.path.startsWith("/watch") ? "/" : loc.path);
   try {
     if (loc.path === "/") await renderHome(token);
+    else if (loc.path === "/vr") {
+      window.vlctubeVr?.enter?.();
+      return;
+    }
     else if (loc.path === "/shorts" || loc.path.startsWith("/shorts/")) await renderShorts(loc.parts[1], token);
     else if (loc.path === "/results") await renderSearch(loc.params.get("q") || "", loc.params.get("type") || "all", token);
     else if (loc.path.startsWith("/watch")) await renderWatch(loc.parts[1] || loc.params.get("v"), token);

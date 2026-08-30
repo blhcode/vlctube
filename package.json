@@ -1,7 +1,7 @@
 {
   "name": "vlctube",
   "productName": "VLCTube",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "YouTube-like UI that plays videos through VLC/yt-dlp, without the YouTube ad player",
   "author": "Isaiah",
   "homepage": "https://github.com/blhcode/vlctube",
